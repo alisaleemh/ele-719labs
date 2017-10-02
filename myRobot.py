@@ -14,7 +14,8 @@ class myRobot(Robot):
     def inverse_kinematics(self, p_dot, theta):
         L = self._L
         wheel_radius = self._wheel_radius
-        m1 = dot((1.0/wheel_radius),(array([[sin(theta), -cos(theta), -L], [sin((pi/3)- 	theta), cos((pi/3)-theta), -L], [-sin((pi/3)+theta), cos((pi/3)+theta), -L]])))
+        #m1 = dot((1.0/wheel_radius),(array([[sin(theta), -cos(theta), -L], [sin((pi/6)-theta), cos((pi/6)-theta), -L], [-sin((pi/6)+theta), cos((pi/6)+theta), -L]])))
+        m1 = (1.0/wheel_radius)*(array([[sin(theta), -cos(theta), -L], [cos((pi/6)+theta), sin((pi/6)+theta), -L], [-cos((pi/6)-theta), sin((pi/6)-theta), -L]]))
         wheel_angular_velocities = dot(m1,p_dot)
 	return wheel_angular_velocities
 
