@@ -84,10 +84,10 @@ elapsed_time = 0.0
 
 # Set start time
 start_time = time()
-danger = 0
+boolDanger = 0
 delta_goal = array ([0.0,0.0,0.0]).T 
-delta_R_i = array ([0.0,0.0,0.0]).T 
-delta_R_goal = array ([0.0,0.0,0.0]).T 
+deltaRI = array ([0.0,0.0,0.0]).T 
+deltaRGoal = array ([0.0,0.0,0.0]).T 
 
 # Control loop
 while ( (not goal_reached) and (elapsed_time < T_f) ):
@@ -110,7 +110,6 @@ while ( (not goal_reached) and (elapsed_time < T_f) ):
 	# Get sensor measurements w.r.t. sensor frames
 	for i in range(0,6):
 		d[i] = robot.Vraw_to_distance(robot.ir_sensors_raw_values[i])
-                print "d[0]",d[0]," D[1]", d[1], " D[2]", d[2], " D[3]", d[3], " D[4]", d[4], "\n"
 	# Check if there is a risk of collision with obstacle(s).
 	# If true, determine the temporary goal vectors delta_goal^0 and delta_goal^R
 	# and use them to find the temporary alpha and rho.
@@ -120,19 +119,19 @@ while ( (not goal_reached) and (elapsed_time < T_f) ):
 
 		for i in range(0,6):
                        if d[i] <= d_min:
-                          danger = 1
+                          boolDanger = 1
  		          break
                        else:
-                          danger = 0
+                          boolDanger = 0
 
-                if danger == 1:
+                if boolDanger == 1:
                        for i in range(0, 6):
                              if d[i] >= (1.5 * d_min):
-                                delta_R_i = np.dot(robot.HMatrix(sensor_loc[i, :]), array([d[i], 0, 1]).T)
-                                delta_R_goal += delta_R_i
-                       delta_R_goal[2] = 1
-                       delta_goal = np.dot(HRo, delta_R_goal)
-                       alpha = atan2(delta_R_goal[1], delta_R_goal[0]) - theta
+                                deltaRI = np.dot(robot.HMatrix(sensor_loc[i, :]), array([d[i], 0, 1]).T)
+                                deltaRGoal += deltaRI
+                       deltaRGoal[2] = 1
+                       delta_goal = np.dot(HRo, deltaRGoal)
+                       alpha = atan2(deltaRGoal[1], deltaRGoal[0]) - theta
                        rho = sqrt((delta_goal[0] - p[0]) ** 2 + (delta_goal[1] - p[1]) ** 2)
                                
 
